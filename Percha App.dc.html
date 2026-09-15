@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    body { margin: 0; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .spin { animation: spin 0.8s linear infinite; display: inline-block; }
+    a { color: #ffffff; }
+    a:hover { color: #c67139; }
+  </style>
+</helmet>
+
+<div style="background:#0f0f11;color:#fff;font-family:'Inter',sans-serif;width:1600px;height:900px;position:relative;overflow:hidden;display:flex;flex-direction:column">
+
+ <div style="flex:1;overflow-y:auto;overflow-x:hidden">
+  <header style="position:sticky;top:0;z-index:40;background:#0f0f11;padding:24px 32px 8px">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div style="flex:1;position:relative">
+        <i class="ph ph-magnifying-glass" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#6b7280;font-size:18px"></i>
+        <input type="text" placeholder="Busca playera, negro, talla M" style="width:100%;box-sizing:border-box;background:#1c1c1e;color:#fff;font-size:14px;border-radius:999px;padding:14px 16px 14px 44px;border:1px solid transparent;outline:none">
+      </div>
+      <button style="width:48px;height:48px;border-radius:999px;background:#1c1c1e;display:flex;align-items:center;justify-content:center;color:#fff;border:none;flex-shrink:0">
+        <i class="ph ph-list" style="font-size:20px"></i>
+      </button>
+    </div>
+  </header>
+
+  <div style="padding:12px 20px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:14px;color:#9ca3af;font-weight:500">4 prendas</span>
+    <button style="display:flex;align-items:center;gap:8px;background:#1c1c1e;border-radius:999px;padding:8px 16px;font-size:14px;font-weight:500;color:#fff;border:none">
+      <i class="ph ph-heart"></i> Guardadas
+    </button>
+  </div>
+
+  <main style="padding:8px 32px 32px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px 24px">
+      <sc-for list="{{ products }}" as="item" hint-placeholder-count="4">
+        <div style="display:flex;flex-direction:column;position:relative">
+          <div style="position:relative;overflow:hidden;height:240px;border-radius:24px;background:#fff;margin-bottom:12px;cursor:pointer" onClick="{{ item.onAdd }}">
+            <img src="{{ item.image }}" alt="{{ item.name }}" style="width:100%;height:100%;object-fit:cover;object-position:top">
+            <div style="position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:8px">
+              <button onClick="{{ item.onSave }}" style="width:40px;height:40px;border-radius:999px;background:rgba(26,26,26,0.9);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;color:#fff;border:none;box-shadow:0 4px 10px rgba(0,0,0,0.4)">
+                <i class="{{ item.heartIconClass }}" style="font-size:20px"></i>
+              </button>
+              <button onClick="{{ item.onAdd }}" style="width:40px;height:40px;border-radius:999px;background:rgba(26,26,26,0.9);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;color:#fff;border:none;box-shadow:0 4px 10px rgba(0,0,0,0.4)">
+                <i class="ph ph-plus" style="font-size:20px"></i>
+              </button>
+            </div>
+            <div style="position:absolute;bottom:12px;left:12px">
+              <span style="background:rgba(75,85,99,0.9);backdrop-filter:blur(6px);color:#fff;font-size:11px;font-weight:500;padding:6px 12px;border-radius:999px">{{ item.views }} personas la vieron</span>
+            </div>
+          </div>
+          <div style="padding:0 4px">
+            <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:2px">
+              <span style="font-size:18px;color:#fff;line-height:1">${{ item.price }}</span>
+              <span style="font-size:12px;color:#6b7280;text-decoration:line-through">${{ item.originalPrice }}</span>
+            </div>
+            <p style="font-size:12px;font-weight:700;color:#fff;margin:0 0 6px">ahorras {{ item.savings }}</p>
+            <h3 style="font-size:13px;font-weight:700;color:#fff;margin:0 0 4px;line-height:1.2">{{ item.name }}</h3>
+            <p style="font-size:12px;color:#9ca3af;margin:0 0 4px">{{ item.condition }} · talla {{ item.size }}</p>
+            <p style="font-size:11px;color:#9ca3af;display:flex;align-items:center;gap:4px;margin:0">
+              <i class="ph-fill ph-star" style="font-size:11px;color:#6b7280"></i> {{ item.rating }} · {{ item.sales }} ventas calificadas
+            </p>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </main>
+ </div>
+
+  <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:130px;z-index:100;display:flex;flex-direction:column;gap:8px;pointer-events:none;align-items:center">
+    <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0">
+      <div style="background:#1c1c1e;color:#fff;padding:12px 20px;border-radius:999px;font-size:14px;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,0.5);border:1px solid #2a2a2c;display:flex;align-items:center;gap:8px">
+        <i class="ph-fill ph-check-circle" style="color:#4ade80;font-size:18px"></i> {{ t.text }}
+      </div>
+    </sc-for>
+  </div>
+
+  <nav style="position:absolute;bottom:0;left:0;width:100%;z-index:50">
+    <div onClick="{{ toggleNav }}" style="position:absolute;top:-28px;right:24px;cursor:pointer;z-index:1">
+      <div style="padding:0 16px;height:28px;background:#1c1c1e;border-radius:12px 12px 0 0;border-top:1px solid #2a2a2c;border-left:1px solid #2a2a2c;border-right:1px solid #2a2a2c;display:flex;align-items:center;justify-content:center;box-shadow:0 -5px 15px rgba(0,0,0,0.5)">
+        <span style="font-size:11px;font-weight:500;color:#9ca3af;margin-right:6px">{{ navToggleText }}</span>
+        <i class="{{ navToggleIcon }}" style="color:#9ca3af;font-size:14px"></i>
+      </div>
+    </div>
+    <div style="background:#1c1c1e;width:100%;box-sizing:border-box;border-radius:40px 40px 0 0;padding:16px 24px;box-shadow:0 -10px 40px rgba(0,0,0,0.6);border-top:1px solid #2a2a2c;position:relative;z-index:0;transition:transform 0.4s ease;transform:{{ navStyle.transform }}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;position:relative">
+        <button style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#9ca3af;background:none;border:none;flex:1;padding-top:8px">
+          <i class="ph ph-sun" style="font-size:28px"></i>
+          <span style="font-size:10px;font-weight:500">Hoy</span>
+        </button>
+        <button style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#9ca3af;background:none;border:none;flex:1;padding-top:8px">
+          <i class="ph ph-squares-four" style="font-size:28px"></i>
+          <span style="font-size:10px;font-weight:500">Armario</span>
+        </button>
+        <div style="flex:1;display:flex;justify-content:center;margin-top:-40px;position:relative;z-index:10">
+          <button style="width:72px;height:72px;background:#fff;border-radius:999px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 25px rgba(0,0,0,0.5);color:#000;border:6px solid #1c1c1e">
+            <i class="ph-fill ph-camera" style="font-size:32px"></i>
+          </button>
+        </div>
+        <button onClick="{{ toggleCart }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;background:none;border:none;flex:1;padding-top:8px;position:relative">
+          <div style="position:relative">
+            <i class="ph-fill ph-tag" style="font-size:28px"></i>
+            <sc-if value="{{ cartCountVisible }}" hint-placeholder-val="{{ false }}">
+              <span style="position:absolute;top:-4px;right:-8px;background:#fff;color:#000;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ cartCount }}</span>
+            </sc-if>
+          </div>
+          <span style="font-size:10px;font-weight:500">Bazar</span>
+        </button>
+        <button style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#9ca3af;background:none;border:none;flex:1;padding-top:8px">
+          <i class="ph ph-corners-out" style="font-size:28px"></i>
+          <span style="font-size:10px;font-weight:500">Probador</span>
+        </button>
+      </div>
+      <div style="text-align:center;margin-top:12px">
+        <span style="font-size:9px;color:#6b7280;font-weight:500">© 2026 Christian Rojas · Todos los derechos reservados</span>
+      </div>
+    </div>
+  </nav>
+
+  <div onClick="{{ toggleCart }}" style="position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);z-index:60;transition:opacity 0.3s ease;opacity:{{ overlayStyle.opacity }};pointer-events:{{ overlayStyle.pointerEvents }}"></div>
+
+  <div style="position:absolute;top:0;right:0;height:100%;width:420px;background:#0f0f11;border-left:1px solid #1f1f22;z-index:70;display:flex;flex-direction:column;box-shadow:-15px 0 30px rgba(0,0,0,0.6);border-radius:24px 0 0 24px;transition:transform 0.35s ease;transform:{{ sidebarStyle.transform }}">
+    <div style="padding:20px;border-bottom:1px solid #1f1f22;display:flex;justify-content:space-between;align-items:center;border-radius:24px 0 0 0">
+      <h2 style="font-size:20px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px;margin:0">
+        <i class="ph ph-shopping-bag" style="font-size:24px"></i> Bolsa de Bazar
+      </h2>
+      <button onClick="{{ toggleCart }}" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:999px;background:#1c1c1e;color:#9ca3af;border:none">
+        <i class="ph ph-x" style="font-size:18px"></i>
+      </button>
+    </div>
+
+    <div class="no-scrollbar" style="flex:1;min-height:0;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px">
+      <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ true }}">
+        <div style="text-align:center;color:#6b7280;margin-top:96px;display:flex;flex-direction:column;align-items:center">
+          <i class="ph ph-shopping-bag-open" style="font-size:60px;margin-bottom:16px;color:#374151"></i>
+          <p style="font-size:16px;font-weight:500;color:#9ca3af;margin:0">Tu bolsa está vacía.</p>
+          <p style="font-size:13px;margin-top:8px">Agrega productos tocando el botón +</p>
+        </div>
+      </sc-if>
+      <sc-for list="{{ cartItems }}" as="ci" hint-placeholder-count="0">
+        <div style="display:flex;gap:16px;background:#1c1c1e;padding:16px;border-radius:24px;border:1px solid #2a2a2c">
+          <img src="{{ ci.image }}" alt="{{ ci.name }}" style="width:96px;height:112px;object-fit:cover;object-position:top;border-radius:12px;background:#121212">
+          <div style="flex:1;display:flex;flex-direction:column;padding:4px 0">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;line-height:1.2;margin:0">{{ ci.name }}</h4>
+                <p style="font-size:12px;color:#9ca3af;margin:4px 0 0">Talla {{ ci.size }}</p>
+              </div>
+              <button onClick="{{ ci.onRemove }}" style="color:#6b7280;background:#121212;width:32px;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;border:none;margin-left:8px">
+                <i class="ph ph-trash" style="font-size:18px"></i>
+              </button>
+            </div>
+            <div style="margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between">
+              <p style="font-size:16px;font-weight:500;color:#fff;margin:0">{{ ci.priceFmt }}</p>
+              <div style="display:flex;align-items:center;background:#121212;border-radius:999px;padding:4px 6px;border:1px solid #2a2a2c">
+                <button onClick="{{ ci.onDec }}" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:#9ca3af;border-radius:999px;background:#1c1c1e;border:none"><i class="ph ph-minus" style="font-size:13px"></i></button>
+                <span style="font-size:14px;font-weight:500;width:32px;text-align:center;color:#fff">{{ ci.qty }}</span>
+                <button onClick="{{ ci.onInc }}" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:#9ca3af;border-radius:999px;background:#1c1c1e;border:none"><i class="ph ph-plus" style="font-size:13px"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="padding:24px;border-top:1px solid #1f1f22">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+        <span style="color:#9ca3af;font-size:16px">Total estimado</span>
+        <span style="font-size:24px;font-weight:700;color:#fff">{{ cartTotalFmt }}</span>
+      </div>
+      <button onClick="{{ checkout }}" style="width:100%;box-sizing:border-box;padding:16px;font-size:17px;font-weight:700;border-radius:16px;border:none;display:flex;align-items:center;justify-content:center;gap:8px;background:{{ checkoutBg }};color:{{ checkoutColor }}">
+        <sc-if value="{{ checkoutProcessing }}" hint-placeholder-val="{{ false }}">
+          <i class="ph ph-spinner-gap spin"></i>
+        </sc-if>
+        {{ checkoutLabel }}
+      </button>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    products: [
+      { id: 1, name: 'Suéter tejido crudo', price: 380, originalPrice: 1200, savings: '68%', views: 14, condition: 'Como nuevo', size: 'M', rating: 4.8, sales: 12, image: 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?auto=format&fit=crop&w=600&q=80', isSaved: true },
+      { id: 2, name: 'Tenis blancos piel', price: 620, originalPrice: 1890, savings: '67%', views: 31, condition: 'Poco uso', size: '27', rating: 4.6, sales: 5, image: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?auto=format&fit=crop&w=600&q=80', isSaved: false },
+      { id: 3, name: 'Pantalón vestir negro', price: 450, originalPrice: 1500, savings: '70%', views: 8, condition: 'Nuevo sin etiqueta', size: '32', rating: 5.0, sales: 24, image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=600&q=80', isSaved: false },
+      { id: 4, name: 'Blusa seda cruzada', price: 420, originalPrice: 1100, savings: '61%', views: 45, condition: 'Como nuevo', size: 'S', rating: 4.9, sales: 18, image: 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=600&q=80', isSaved: false }
+    ],
+    cart: [],
+    cartOpen: false,
+    navExpanded: true,
+    toasts: [],
+    checkoutState: 'idle'
+  };
+
+  toggleSave(id) {
+    this.setState(s => ({ products: s.products.map(p => p.id === id ? { ...p, isSaved: !p.isSaved } : p) }));
+  }
+
+  addToCart(id) {
+    const product = this.state.products.find(p => p.id === id);
+    this.setState(s => {
+      const existing = s.cart.find(c => c.id === id);
+      const cart = existing ? s.cart.map(c => c.id === id ? { ...c, qty: c.qty + 1 } : c) : [...s.cart, { id, qty: 1 }];
+      return { cart };
+    });
+    if (product) this.showToast('¡' + product.name + ' agregado!');
+  }
+
+  removeFromCart(id) {
+    this.setState(s => ({ cart: s.cart.filter(c => c.id !== id) }));
+  }
+
+  updateQty(id, delta) {
+    this.setState(s => ({ cart: s.cart.map(c => c.id === id ? { ...c, qty: c.qty + delta } : c).filter(c => c.qty > 0) }));
+  }
+
+  toggleCart() {
+    this.setState(s => ({ cartOpen: !s.cartOpen }));
+  }
+
+  toggleNav() {
+    this.setState(s => ({ navExpanded: !s.navExpanded }));
+  }
+
+  showToast(text) {
+    const id = Date.now() + Math.random();
+    this.setState(s => ({ toasts: [...s.toasts, { id, text }] }));
+    setTimeout(() => {
+      this.setState(s => ({ toasts: s.toasts.filter(t => t.id !== id) }));
+    }, 2200);
+  }
+
+  checkout() {
+    if (this.state.cart.length === 0 || this.state.checkoutState !== 'idle') return;
+    this.setState({ checkoutState: 'processing' });
+    setTimeout(() => {
+      this.setState({ cart: [], checkoutState: 'success' });
+      setTimeout(() => {
+        this.setState({ checkoutState: 'idle', cartOpen: false });
+      }, 1800);
+    }, 1200);
+  }
+
+  renderVals() {
+    const { products, cart, cartOpen, navExpanded, toasts, checkoutState } = this.state;
+    const fmt = n => new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(n);
+
+    const productList = products.map(p => ({
+      ...p,
+      heartIconClass: (p.isSaved ? 'ph-fill' : 'ph') + ' ph-heart',
+      onSave: () => this.toggleSave(p.id),
+      onAdd: () => this.addToCart(p.id)
+    }));
+
+    const cartItems = cart.map(c => {
+      const p = products.find(pp => pp.id === c.id);
+      return {
+        id: p.id, name: p.name, image: p.image, size: p.size, qty: c.qty,
+        priceFmt: fmt(p.price), lineTotal: p.price * c.qty,
+        onRemove: () => this.removeFromCart(p.id),
+        onInc: () => this.updateQty(p.id, 1),
+        onDec: () => this.updateQty(p.id, -1)
+      };
+    });
+    const total = cartItems.reduce((s, i) => s + i.lineTotal, 0);
+    const totalItems = cart.reduce((s, c) => s + c.qty, 0);
+
+    return {
+      products: productList,
+      cartItems,
+      cartEmpty: cartItems.length === 0,
+      cartCount: totalItems,
+      cartCountVisible: totalItems > 0,
+      cartTotalFmt: fmt(total),
+      toasts,
+      sidebarStyle: { transform: cartOpen ? 'translateX(0)' : 'translateX(100%)' },
+      overlayStyle: { opacity: cartOpen ? 1 : 0, pointerEvents: cartOpen ? 'auto' : 'none' },
+      navStyle: { transform: navExpanded ? 'translateY(0)' : 'translateY(100%)' },
+      navToggleText: navExpanded ? 'Ocultar' : 'Menú',
+      navToggleIcon: 'ph ph-' + (navExpanded ? 'caret-down' : 'caret-up'),
+      toggleCart: () => this.toggleCart(),
+      toggleNav: () => this.toggleNav(),
+      checkout: () => this.checkout(),
+      checkoutProcessing: checkoutState === 'processing',
+      checkoutLabel: checkoutState === 'processing' ? 'Procesando...' : (checkoutState === 'success' ? '¡Compra Exitosa!' : 'Proceder al Pago'),
+      checkoutBg: checkoutState === 'success' ? '#22c55e' : '#ffffff',
+      checkoutColor: checkoutState === 'success' ? '#ffffff' : '#000000'
+    };
+  }
+}
+</script>
+</body>
+</html>
