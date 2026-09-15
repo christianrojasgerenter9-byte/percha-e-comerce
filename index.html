@@ -23,10 +23,10 @@
   </style>
 </helmet>
 
-<div style="background:#0f0f11;color:#fff;font-family:'Inter',sans-serif;width:1600px;height:900px;position:relative;overflow:hidden;display:flex;flex-direction:column">
+<div style="background:#0f0f11;color:#fff;font-family:'Inter',sans-serif;width:100%;max-width:1600px;margin:0 auto;height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box">
 
  <div style="flex:1;overflow-y:auto;overflow-x:hidden">
-  <header style="position:sticky;top:0;z-index:40;background:#0f0f11;padding:24px 32px 8px">
+  <header style="position:sticky;top:0;z-index:40;background:#0f0f11;padding:24px 16px 8px">
     <div style="display:flex;gap:12px;align-items:center">
       <div style="flex:1;position:relative">
         <i class="ph ph-magnifying-glass" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#6b7280;font-size:18px"></i>
@@ -45,8 +45,8 @@
     </button>
   </div>
 
-  <main style="padding:8px 32px 32px">
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px 24px">
+  <main style="padding:8px 16px 160px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px 20px">
       <sc-for list="{{ products }}" as="item" hint-placeholder-count="4">
         <div style="display:flex;flex-direction:column;position:relative">
           <div style="position:relative;overflow:hidden;height:240px;border-radius:24px;background:#fff;margin-bottom:12px;cursor:pointer" onClick="{{ item.onAdd }}">
@@ -133,7 +133,7 @@
 
   <div onClick="{{ toggleCart }}" style="position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);z-index:60;transition:opacity 0.3s ease;opacity:{{ overlayStyle.opacity }};pointer-events:{{ overlayStyle.pointerEvents }}"></div>
 
-  <div style="position:absolute;top:0;right:0;height:100%;width:420px;background:#0f0f11;border-left:1px solid #1f1f22;z-index:70;display:flex;flex-direction:column;box-shadow:-15px 0 30px rgba(0,0,0,0.6);border-radius:24px 0 0 24px;transition:transform 0.35s ease;transform:{{ sidebarStyle.transform }}">
+  <div style="position:absolute;top:0;right:0;height:100%;width:min(90vw,420px);background:#0f0f11;border-left:1px solid #1f1f22;z-index:70;display:flex;flex-direction:column;box-shadow:-15px 0 30px rgba(0,0,0,0.6);border-radius:24px 0 0 24px;transition:transform 0.35s ease;transform:{{ sidebarStyle.transform }}">
     <div style="padding:20px;border-bottom:1px solid #1f1f22;display:flex;justify-content:space-between;align-items:center;border-radius:24px 0 0 0">
       <h2 style="font-size:20px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px;margin:0">
         <i class="ph ph-shopping-bag" style="font-size:24px"></i> Bolsa de Bazar
